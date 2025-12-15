@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen: Bases de Datos y Modelo Relacional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 3px solid #667eea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: white;
+            border: 2px solid #667eea;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        nav a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        section {
+            margin-bottom: 50px;
+            scroll-margin-top: 80px;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+        
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateX(5px);
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .ejemplo {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .ejemplo h4 {
+            color: #17a2b8;
+            margin-top: 0;
+        }
+        
+        .arquitectura {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .nivel {
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nivel-externo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .nivel-conceptual {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .nivel-interno {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .quiz {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .pregunta {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .pregunta h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .opcion {
+            padding: 12px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .opcion:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+        
+        .opcion.correcta {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .opcion.incorrecta {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .explicacion {
+            background: #e7f3ff;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .acid-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .acid-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 5px solid #667eea;
+        }
+        
+        .acid-item h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        
+        ul {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+            display: inline-block;
+            line-height: 1.8;
+        }
+        
+        .transformacion-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .regla {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Bases de Datos: Fundamentos y Modelo Relacional</h1>
+            <p>Resumen Completo y Detallado para tu Examen</p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#intro">Introducción</a></li>
+                <li><a href="#definicion">Definición</a></li>
+                <li><a href="#sgbd">SGBD</a></li>
+                <li><a href="#abstraccion">Abstracción</a></li>
+                <li><a href="#modelo-relacional">Modelo Relacional</a></li>
+                <li><a href="#transformacion">Transformación ER→MR</a></li>
+                <li><a href="#quiz">Quiz de Práctica</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content">
+            <section id="intro">
+                <h2>🎯 1. Introducción a las Bases de Datos</h2>
+                
+                <div class="highlight">
+                    <h3>¿Qué tan frecuente interactuamos con BD?</h3>
+                    <p><strong>Todos los días, todo el tiempo:</strong></p>
+                    <ul>
+                        <li>📱 WhatsApp: 100 mil millones de mensajes diarios</li>
+                        <li>📸 Instagram: 500 millones de fotos diarias</li>
+                        <li>💳 Visa: 65,000 transacciones por segundo</li>
+                        <li>🗺️ Google Maps: 1 mil millones de usuarios mensuales</li>
+                    </ul>
+                </div>
+                
+                <div class="ejemplo">
+                    <h4>💬 Ejemplo Real: Pago con Tarjeta de Crédito</h4>
+                    <ol>
+                        <li><strong>Tienda envía datos al banco</strong> (tu tarjeta, monto)</li>
+                        <li><strong>Red de pagos consulta múltiples BD:</strong>
+                            <ul>
+                                <li>¿Existe la tarjeta? ✓</li>
+                                <li>¿Hay saldo suficiente? ✓</li>
+                                <li>¿Es transacción sospechosa? ✗</li>
+                            </ul>
+                        </li>
+                        <li><strong>Banco autoriza o rechaza</strong></li>
+                        <li><strong>Todo esto en segundos</strong> ⚡</li>
+                    </ol>
+                </div>
+            </section>
+            
+            <section id="definicion">
+                <h2>📖 2. Definición de Base de Datos</h2>
+                
+                <div class="card">
+                    <h3>Definición Formal</h3>
+                    <p><strong>Una Base de Datos es:</strong> Una colección de datos relacionados que representa aspectos del mundo real (minimundo o universo del discurso).</p>
+                </div>
+                
+                <div class="important">
+                    <h4>🔑 Conceptos Clave</h4>
+                    <p><strong>Minimundo:</strong> La realidad de la cual abstraemos entidades y relaciones</p>
+                    <p><strong>Dato:</strong> Valor individual sin contexto (ej: "Valeria", "23", "medicina")</p>
+                    <p><strong>Información:</strong> Datos procesados con significado</p>
+                </div>
+                
+                <h3>✨ Características de una Base de Datos</h3>
+                
+                <div class="card">
+                    <ol>
+                        <li><strong>Representa el minimundo</strong></li>
+                        <li><strong>Datos relacionados lógicamente</strong></li>
+                        <li><strong>Propósito específico</strong></li>
+                        <li><strong>Información actualizada</strong></li>
+                        <li><strong>Control de concurrencia</strong></li>
+                    </ol>
+                </div>
+            </section>
+            
+            <section id="sgbd">
+                <h2>💻 3. Sistema Gestor de Base de Datos (SGBD)</h2>
+                
+                <div class="highlight">
+                    <h3>¿Qué es un SGBD?</h3>
+                    <p>Software de propósito general que permite:</p>
+                    <ul>
+                        <li>✅ Definir tipos de datos y metadatos</li>
+                        <li>✅ Almacenar datos controladamente</li>
+                        <li>✅ Administrar consultas y actualizaciones</li>
+                        <li>✅ Compartir BD con múltiples usuarios</li>
+                        <li>✅ Proteger contra caídas y accesos no autorizados</li>
+                    </ul>
+                </div>
+                
+                <h3>🔐 Propiedades ACID de las Transacciones</h3>
+                
+                <div class="acid-box">
+                    <div class="acid-item">
+                        <h4>⚛️ Atomicidad</h4>
+                        <p>Una transacción se efectúa completamente o no se efectúa nada</p>
+                    </div>
+                    
+                    <div class="acid-item">
+                        <h4>✔️ Consistencia</h4>
+                        <p>La BD debe pasar de un estado válido a otro estado válido</p>
+                    </div>
+                    
+                    <div class="acid-item">
+                        <h4>🔒 Aislamiento</h4>
+                        <p>Las transacciones paralelas se ejecutan como si fueran en serie</p>
+                    </div>
+                    
+                    <div class="acid-item">
+                        <h4>💾 Durabilidad</h4>
+                        <p>Las transacciones realizan cambios permanentes</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="abstraccion">
+                <h2>🎨 4. Abstracción e Independencia de Datos</h2>
+                
+                <div class="highlight">
+                    <h3>🤔 ¿Qué es la Abstracción?</h3>
+                    <p><strong>Abstracción:</strong> Suprime detalles técnicos para concentrarse en características relevantes</p>
+                    <p><strong>¿Para qué sirve?</strong> Para capturar información valiosa del minimundo</p>
+                </div>
+                
+                <h3>🏛️ Arquitectura de 3 Niveles</h3>
+                
+                <div class="arquitectura">
+                    <div class="nivel nivel-externo">
+                        <h4>📱 NIVEL EXTERNO (VISTAS)</h4>
+                        <p>Lo que ven los usuarios - Interfaces personalizadas</p>
+                    </div>
+                    
+                    <div class="nivel nivel-conceptual">
+                        <h4>🧠 NIVEL CONCEPTUAL (LÓGICO)</h4>
+                        <p>Qué datos se almacenan y sus relaciones</p>
+                    </div>
+                    
+                    <div class="nivel nivel-interno">
+                        <h4>💾 NIVEL INTERNO (FÍSICO)</h4>
+                        <p>Cómo se almacenan físicamente los datos</p>
+                    </div>
+                </div>
+                
+                <h3>🔓 Independencia de Datos</h3>
+                
+                <div class="card">
+                    <h4>1️⃣ Independencia Lógica</h4>
+                    <p>Capacidad de modificar el esquema conceptual sin alterar esquemas externos</p>
+                    <p>⚠️ Compleja de implementar</p>
+                </div>
+                
+                <div class="card">
+                    <h4>2️⃣ Independencia Física</h4>
+                    <p>Capacidad de modificar el esquema interno sin afectar el conceptual</p>
+                    <p>✅ Común en la mayoría de SGBD</p>
+                </div>
+            </section>
+            
+            <section id="modelo-relacional">
+                <h2>🗄️ 5. Modelo Relacional</h2>
+                
+                <div class="highlight">
+                    <h3>📜 Historia</h3>
+                    <p><strong>Dr. Edgar Codd</strong> propuso el modelo relacional en <strong>1970</strong> en IBM</p>
+                    <p>Actualmente es el modelo dominante de datos estructurados</p>
+                </div>
+                
+                <div class="ejemplo">
+                    <h4>Ejemplo Visual de Tabla</h4>
+                    <table>
+                        <tr>
+                            <th>id (PK)</th>
+                            <th>nombre</th>
+                            <th>apellido</th>
+                            <th>carrera</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Valeria</td>
+                            <td>Venegas</td>
+                            <td>Medicina</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Carlos</td>
+                            <td>López</td>
+                            <td>Ingeniería</td>
+                        </tr>
+                    </table>
+                    <p><strong>Esquema:</strong> ESTUDIANTE(id, nombre, apellido, carrera)</p>
+                </div>
+            </section>
+            
+            <section id="transformacion">
+                <h2>🔄 6. Transformación MER → MR</h2>
+                
+                <div class="transformacion-box">
+                    <h3>📋 REGLAS DE TRANSFORMACIÓN</h3>
+                    
+                    <div class="regla">
+                        <h4>✅ REGLA 1: Entidades Fuertes</h4>
+                        <p>Cada entidad fuerte → Una tabla</p>
+                        <div class="ejemplo">
+                            <code>EMPLEADO(idEmp, nomEmp, apellEmp, salario)</code>
+                        </div>
+                    </div>
+                    
+                    <div class="regla">
+                        <h4>✅ REGLA 2: Entidades Débiles</h4>
+                        <p>PK = FK entidad fuerte + clave parcial</p>
+                        <div class="ejemplo">
+                            <code>DEPENDIENTE(idEmp, nomDep, apellDep, fechaNac)</code>
+                            <p>PK: {idEmp, nomDep}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="regla">
+                        <h4>✅ REGLA 3: Relaciones 1:1</h4>
+                        <p><strong>Opción 1:</strong> Fusión (con participación total)</p>
+                        <p><strong>Opción 2:</strong> Tabla intermedia (con participación parcial)</p>
+                    </div>
+                    
+                    <div class="regla">
+                        <h4>✅ REGLA 4: Relaciones 1:n</h4>
+                        <p>FK del lado "1" va al lado "n"</p>
+                        <div class="ejemplo">
+                            <code>EMPLEADO(idEmp, idDpto, nombEmp, salario)</code>
+                            <p>idDpto es FK → DEPARTAMENTO</p>
+                        </div>
+                    </div>
+                    
+                    <div class="regla">
+                        <h4>✅ REGLA 5: Relaciones n:n</h4>
+                        <p>Tabla nueva con PK = {FK1 + FK2}</p>
+                        <div class="ejemplo">
+                            <code>TRABAJAEN(idEmp, idProy, horasTrabajo)</code>
+                            <p>PK: {idEmp, idProy}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="regla">
+                        <h4>✅ REGLA 6: Atributos Multi-valuados</h4>
+                        <p>Tabla nueva con FK + atributo</p>
+                        <div class="ejemplo">
+                            <code>TELEFONO_EMP(idEmp, telefono)</code>
+                        </div>
+                    </div>
+                    
+                    <div class="regla">
+                        <h4>✅ REGLA 7: Atributos Compuestos</h4>
+                        <p>Descomponer en atributos simples</p>
+                        <div class="ejemplo">
+                            <code>EMPLEADO(idEmp, Calle, Ciudad, Número)</code>
+                        </div>
+                    </div>
+                    
+                    <div class="regla">
+                        <h4>✅ REGLA 8: Jerarquías</h4>
+                        <p><strong>Opción 1:</strong> Class Table (tabla superclase + subclases)</p>
+                        <p><strong>Opción 2:</strong> Single Table (una tabla con todos los atributos)</p>
+                        <p><strong>Opción 3:</strong> Concrete Table (tabla por subclase con redundancia)</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="quiz">
+                <h2>📝 Quiz de Práctica</h2>
+                
+                <div class="quiz">
+                    <div class="pregunta" id="p1">
+                        <h4>Pregunta 1: ¿Cuál NO es una propiedad ACID?</h4>
+                        <div class="opcion" onclick="verificar(1, 'A')">A) Atomicidad</div>
+                        <div class="opcion" onclick="verificar(1, 'B')">B) Disponibilidad</div>
+                        <div class="opcion" onclick="verificar(1, 'C')">C) Consistencia</div>
+                        <div class="opcion" onclick="verificar(1, 'D')">D) Durabilidad</div>
+                        <div class="explicacion" id="exp1">
+                            <strong>✅ Respuesta: B) Disponibilidad</strong><br>
+                            ACID: Atomicidad, Consistencia, Aislamiento, Durabilidad
+                        </div>
+                    </div>
+                    
+                    <div class="pregunta" id="p2">
+                        <h4>Pregunta 2: ¿Qué tipo de independencia permite cambiar el almacenamiento físico?</h4>
+                        <div class="opcion" onclick="verificar(2, 'A')">A) Independencia Lógica</div>
+                        <div class="opcion" onclick="verificar(2, 'B')">B) Independencia Física</div>
+                        <div class="opcion" onclick="verificar(2, 'C')">C) Independencia de Aplicaciones</div>
+                        <div class="opcion" onclick="verificar(2, 'D')">D) Independencia de Datos</div>
+                        <div class="explicacion" id="exp2">
+                            <strong>✅ Respuesta: B) Independencia Física</strong><br>
+                            Permite modificar almacenamiento sin afectar esquema conceptual
+                        </div>
+                    </div>
+                    
+                    <div class="pregunta" id="p3">
+                        <h4>Pregunta 3: En una relación 1:n, ¿dónde se coloca la FK?</h4>
+                        <div class="opcion" onclick="verificar(3, 'A')">A) En el lado "1"</div>
+                        <div class="opcion" onclick="verificar(3, 'B')">B) En el lado "n"</div>
+                        <div class="opcion" onclick="verificar(3, 'C')">C) En tabla intermedia</div>
+                        <div class="opcion" onclick="verificar(3, 'D')">D) En ambas tablas</div>
+                        <div class="explicacion" id="exp3">
+                            <strong>✅ Respuesta: B) En el lado "n"</strong><br>
+                            La PK del lado "1" se incluye como FK en el lado "n"
+                        </div>
+                    </div>
+                    
+                    <div class="pregunta" id="p4">
+                        <h4>Pregunta 4: ¿Cómo se forma la PK de una entidad débil?</h4>
+                        <div class="opcion" onclick="verificar(4, 'A')">A) Solo la clave parcial</div>
+                        <div class="opcion" onclick="verificar(4, 'B')">B) Clave parcial + FK entidad fuerte</div>
+                        <div class="opcion" onclick="verificar(4, 'C')">C) Solo FK entidad fuerte</div>
+                        <div class="opcion" onclick="verificar(4, 'D')">D) Nuevo atributo generado</div>
+                        <div class="explicacion" id="exp4">
+                            <strong>✅ Respuesta: B) Clave parcial + FK entidad fuerte</strong><br>
+                            La PK combina ambas claves
+                        </div>
+                    </div>
+                    
+                    <div class="pregunta" id="p5">
+                        <h4>Pregunta 5: ¿Qué propuso Edgar Codd en 1970?</h4>
+                        <div class="opcion" onclick="verificar(5, 'A')">A) Modelo jerárquico</div>
+                        <div class="opcion" onclick="verificar(5, 'B')">B) Modelo relacional</div>
+                        <div class="opcion" onclick="verificar(5, 'C')">C) Lenguaje SQL</div>
+                        <div class="opcion" onclick="verificar(5, 'D')">D) Bases NoSQL</div>
+                        <div class="explicacion" id="exp5">
+                            <strong>✅ Respuesta: B) Modelo relacional</strong><br>
+                            Codd propuso el modelo relacional en IBM (1970)
+                        </div>
+                    </div>
+                    
+                    <button onclick="reiniciarQuiz()">🔄 Reiniciar Quiz</button>
+                </div>
+            </section>
+            
+            <section id="resumen-final">
+                <h2>📚 Resumen Final</h2>
+                
+                <div class="important">
+                    <h3>⚠️ Errores Comunes a Evitar</h3>
+                    <ul>
+                        <li>❌ Confundir independencia física con lógica</li>
